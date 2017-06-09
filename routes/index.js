@@ -1,26 +1,22 @@
 var express = require('express');
+var Autenticacion = require('../helper/autenticacion');
 var router = express.Router();
-
-var lista = [
-  {"nombre": "Javier"},
-  {"nombre": "Jorge"},
-  {"nombre": "Fredy"},
-  {"nombre": "Juan"},
-  {"nombre": "Aisis"},
-  {"nombre": "Henry"}
-];
+var auth = new Autenticacion();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+  auth.autorizar(req);
+  res.render(auth.getPath() + 'index');
 });
 
-router.get('/nombres', function(req, res) {
-  res.render('lista', {lista});
+router.get('/cookie/clear', function(req, res) {
+  res.clearCookie('nick');
+  res.clearCookie('idUsuario');
+  res.end("Se eliminaron las cookies");
 });
 
-router.post('/nombre/nuevo', function(req, res) {
-  
+router.get('/cookie/all', function(req, res) {
+  res.status(200).send(req.cookies);
 });
 
 module.exports = router;

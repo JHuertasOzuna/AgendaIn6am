@@ -1,9 +1,10 @@
 var database = require('./database');
-var categoria = {};
+var contacto = {};
 
-categoria.selectAll = function(callback) {
+contacto.selectAll = function(idUsuario, callback) {
   if(database) {
-    database.query("SELECT * FROM Categoria",
+    database.query("SELECT * FROM usuario_contacto WHERE idUsuario = ?",
+    idUsuario,
     function(error, resultados) {
       if(error) {
         throw error;
@@ -14,10 +15,10 @@ categoria.selectAll = function(callback) {
   }//Fin IF
 }//FIN SelectAll
 
-categoria.select = function(idCategoria, callback) {
+contacto.select = function(idContacto, callback) {
   if(database) {
-    var sql = "SELECT * FROM Categoria WHERE idCategoria = ?";
-    database.query(sql, idCategoria,
+    var sql = "SELECT * FROM Contacto WHERE idContacto = ?";
+    database.query(sql, idContacto,
     function(error, resultado) {
       if(error) {
         throw error;
@@ -28,9 +29,9 @@ categoria.select = function(idCategoria, callback) {
   }//Fin IF
 }//FIN SelectAll
 
-categoria.insert = function(data, callback) {
+contacto.insert = function(data, callback) {
   if(database) {
-    database.query("INSERT INTO Categoria SET ? ", data,
+    database.query("INSERT INTO Contacto SET ? ", data,
     function(error, resultado) {
       if(error) {
         throw error;
@@ -41,26 +42,27 @@ categoria.insert = function(data, callback) {
   }//Fin IF
 }//FIN SelectAll
 
-categoria.update = function(data, callback) {
+contacto.update = function(data, callback) {
   if(database) {
-    var sql = "UPDATE Categoria SET "
-    +"nombreCategoria = ? WHERE idCategoria = ?";
+    var sql = "UPDATE Contacto SET "
+    +"nombre = ?, apellido = ?, direccion = ?, telefono = ?, correo = ?, idCategoria = ?  "
+    +"WHERE idContacto = ?";
     database.query(sql,
-    [data.nombreCategoria, data.idCategoria],
+    [data.nombre, data.apellido, data.direccion, data.telefono, data.correo, data.idCategoria, data.idContacto],
     function(error, resultado) {
       if(error) {
         throw error;
       } else {
-        callback(null, {"insertId": resultado.insertId});
+        callback(null, data);
       }
     });//Fin query
   }//Fin IF
 }//FIN SelectAll
 
-categoria.delete = function(idCategoria, callback) {
+contacto.delete = function(idContacto, callback) {
   if(database) {
-    var sql = "DELETE FROM Categoria WHERE idCategoria = ?";
-    database.query(sql, idCategoria,
+    var sql = "DELETE FROM Contacto WHERE idContacto = ?";
+    database.query(sql, idContacto,
     function(error, resultado) {
       if(error) {
         throw error;
@@ -72,4 +74,4 @@ categoria.delete = function(idCategoria, callback) {
 }//FIN SelectAll
 
 
-module.exports = categoria;
+module.exports = contacto;
